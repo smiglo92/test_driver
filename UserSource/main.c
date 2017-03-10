@@ -5,26 +5,10 @@
  *      Author: Mateusz
  */
 
-#include "stdint.h"
-#include "stdbool.h"
-#include "inc/hw_memmap.h"
-#include "inc/hw_types.h"
-#include "inc/hw_gpio.h"
-#include "driverlib/interrupt.h"
-#include "driverlib/pin_map.h"
-#include "driverlib/sysctl.h"
-#include "driverlib/gpio.h"
-#include "driverlib/pwm.h"
-#include "driverlib/adc.h"
-
-#include "mb_LED.h"
-#include "mb_Motor.h"
-#include "init.h"
-
+#include "main.h"
 
 int main(void)
 {
-
 	setMainClock();
 
 	enablePeripheralClocks();
@@ -35,9 +19,15 @@ int main(void)
 
 	initAdc();
 
+	zeroCurrentAdc = measureMotor1ZeroCurrent();
+
 	initPwm0();
 
 	initPwm1();
+
+	initQEI0();
+
+	initQEI1();
 
     IntMasterEnable();
 

@@ -99,5 +99,23 @@ uint8_t mb_Motor_Synchro_HomeSwitch(MbMotor motor)
 	return state;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+uint32_t measureMotor1ZeroCurrent(void)
+{
+	uint8_t i;
+	uint32_t result = 0;
 
+	isMeasureZeroCurrent = 1;
+
+	while (zeroCurrentAdcIter < 32);
+
+	isMeasureZeroCurrent = 0;
+
+	for (i = 0; i < 32; i++)
+	{
+		result += zeroCurrentAdcTab[i];
+	}
+
+	return (result >> 5);
+}
 

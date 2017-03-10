@@ -19,6 +19,7 @@
 #include "driverlib/pwm.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/adc.h"
+#include "driverlib/qei.h"
 #include "driverlib/pin_map.h"
 
 /*clock is 200MHz / 2,5 = 80MHz*/
@@ -37,7 +38,7 @@ void unlockNmiPins(void);
 void setGpioOutputs(void);
 
 
-/*ADC measures input voltage*/
+/*ADC measures input voltage and motors currents*/
 void initAdc(void);
 
 
@@ -47,5 +48,14 @@ void initPwm0(void);
 
 /*PWM1 generate signals for MOTOR1*/
 void initPwm1(void);
+
+
+/*QEI0 measures position and velocity of MOTOR1*/
+void initQEI0(void);
+
+
+/*QEI1 measures position and velocity of MOTOR2*/
+void initQEI1(void);
+
 
 #endif /* USERSOURCE_INIT_H_ */

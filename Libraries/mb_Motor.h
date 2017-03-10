@@ -20,16 +20,14 @@
 #include "driverlib/pwm.h"
 #include "driverlib/interrupt.h"
 
+volatile uint8_t isMeasureZeroCurrent;
+volatile uint32_t zeroCurrentAdcTab[32];
+volatile uint8_t zeroCurrentAdcIter;
 
 typedef enum {
     MOTOR1 = 0,
     MOTOR2 = 1,
 }MbMotor;
-
-typedef enum {
-	LEFT = 0,
-	RIGHT = 1,
-}MbMotorDirection;
 
 typedef struct {
 	int32_t kp;
@@ -52,7 +50,7 @@ typedef struct {
 	volatile int32_t currentTargetFromPidUnlimited;
 	volatile int32_t currentError;
 	MbMotorPid currentPid;
-	volatile int32_t position;
+	volatile uint32_t position;
 	volatile int32_t velocity;
 	volatile int32_t velocityTarget;
 	volatile int32_t velocityError;
@@ -60,7 +58,7 @@ typedef struct {
 	volatile int32_t pwmInput;
 	volatile int32_t pwmInputPrevious;
 	volatile int32_t pwmInputUnlimited;
-	volatile MbMotorDirection direction;
+	volatile int32_t direction;
 	MbMotorSynchronization synchronization;
 }MbMotorStruct;
 
@@ -91,6 +89,12 @@ void mb_Motor_Set_Pulse_Width(MbMotor motor, int16_t width);
  * 		- 0 if low state
  * 		- 1 if high state*/
 uint8_t mb_Motor_Synchro_HomeSwitch(MbMotor motor);
+
+
+/*Returns ADC measure when MOTOR1 is disable
+ * return:
+ *      - result of ADC measure*/
+uint32_t measureMotor1ZeroCurrent(void);
 
 
 #endif /* MB_MOTOR_H_ */
