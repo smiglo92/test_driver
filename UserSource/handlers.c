@@ -7,6 +7,27 @@
 
 #include "handlers.h"
 
+/*variables with ADC measures*/
+uint32_t adc0[8];
+uint32_t adc1[8];
+
+/*Structures with motors parameters*/
+extern MbMotorStruct motor1Struct, motor2Struct;
+
+/*Input voltage: inputVoltage1 - before sign, inputVoltage2 - after sign*/
+extern volatile uint32_t inputVoltage1;
+extern volatile uint32_t inputVoltage2;
+
+/*Variables controls PID frequency*/
+extern volatile uint8_t isPid1Switch;
+extern volatile uint8_t isPid2Switch;
+
+/*Variables to compute MOTOR1 zero current*/
+extern volatile uint8_t isMeasureZeroCurrent;
+extern volatile uint32_t zeroCurrentAdcTab[32];
+extern volatile uint32_t zeroCurrentAdc;
+extern volatile uint8_t zeroCurrentAdcIter;
+
 void ADC0IntHandler(void)
 {
 	uint8_t i;
@@ -20,8 +41,13 @@ void ADC0IntHandler(void)
 	ADCSequenceDataGet(ADC0_BASE, 0, adc0);
 
     if (isMeasureZeroCurrent) {
-    	zeroCurrentAdcTab[zeroCurrentAdcIter] = adc0[0];
-    	zeroCurrentAdcIter++;
+    	if(zeroCurrentAdcIter < 32) {
+    		zeroCurrentAdcTab[zeroCurrentAdcIter] = adc0[0];
+    		zeroCurrentAdcIter++;
+    	}
+    	else {
+    		isMeasureZeroCurrent = 0;
+    	}
     }
     else {
     	currentMotor1[currentMotor1Iter] = ((int32_t)(adc0[0]) -
@@ -54,8 +80,8 @@ void ADC1IntHandler(void)
 
 	ADCSequenceDataGet(ADC1_BASE, 0, adc1);
 
-    common = (int32_t)(adc1[0])*1078605/4037670;// - 4;
-//
+    common = (int32_t)(adc1[0]) * 1078605 / 4037670;
+
     if(common < 0)
     	common = 0;
 
@@ -78,12 +104,16 @@ void PWM0IntHandler(void)
 
 	PWMSyncTimeBase(PWM1_BASE, PWM_GEN_0_BIT);
 
+	isPid2Switch = 1;
+
 	SysCtlDelay(3);
 }
 
 void PWM1IntHandler(void)
 {
 	PWMGenIntClear(PWM1_BASE, PWM_GEN_0, PWM_INT_CNT_LOAD);
+
+	isPid1Switch = 1;
 
 	SysCtlDelay(3);
 }

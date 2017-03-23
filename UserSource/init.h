@@ -22,40 +22,11 @@
 #include "driverlib/qei.h"
 #include "driverlib/pin_map.h"
 
-/*clock is 200MHz / 2,5 = 80MHz*/
-void setMainClock(void);
+#include "mb_Motor.h"
 
+/*initialize all peripherals used in project*/
+void initAllPeripherals(void);
 
-/*enables GPIO, PWM and ADC*/
-void enablePeripheralClocks(void);
-
-
-/*before this PD7 and PF0 are locked*/
-void unlockNmiPins(void);
-
-
-/*set pins for motors enable and LEDs*/
-void setGpioOutputs(void);
-
-
-/*ADC measures input voltage and motors currents*/
-void initAdc(void);
-
-
-/*PWM0 generate signals for MOTOR2*/
-void initPwm0(void);
-
-
-/*PWM1 generate signals for MOTOR1*/
-void initPwm1(void);
-
-
-/*QEI0 measures position and velocity of MOTOR1*/
-void initQEI0(void);
-
-
-/*QEI1 measures position and velocity of MOTOR2*/
-void initQEI1(void);
 
 
 #endif /* USERSOURCE_INIT_H_ */

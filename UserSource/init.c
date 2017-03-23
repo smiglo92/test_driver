@@ -7,6 +7,9 @@
 
 #include "init.h"
 
+/*ADC measurement with MOTOR1 zero current*/
+extern volatile uint32_t zeroCurrentAdc;
+
 void setMainClock(void)
 {
 	/*set clock to 80MHz*/
@@ -111,7 +114,7 @@ void initPwm0(void)
                     PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
     PWMGenPeriodSet(PWM0_BASE, PWM_GEN_2, 4000);
     PWMPulseWidthSet(PWM0_BASE, PWM_OUT_4, 1);
-    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_5, 170);
+    PWMPulseWidthSet(PWM0_BASE, PWM_OUT_5, 1);
 
     /*PWM0 interrupt enable*/
     PWMIntEnable(PWM0_BASE, PWM_INT_GEN_2);
@@ -138,7 +141,7 @@ void initPwm1(void)
                     PWM_GEN_MODE_UP_DOWN | PWM_GEN_MODE_NO_SYNC);
     PWMGenPeriodSet(PWM1_BASE, PWM_GEN_0, 4000);
     PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, 1);
-    PWMPulseWidthSet(PWM1_BASE, PWM_OUT_1, 80);
+    PWMPulseWidthSet(PWM1_BASE, PWM_OUT_1, 1);
 
     /*PWM1 interrupt enable*/
     PWMIntEnable(PWM1_BASE, PWM_INT_GEN_0);
@@ -153,35 +156,74 @@ void initPwm1(void)
 
 void initQEI0(void)
 {
+	/*PD6 - phase A, PD7 - phase B, PF4 - index*/
 	GPIOPinTypeQEI(GPIO_PORTD_BASE, GPIO_PIN_6 | GPIO_PIN_7);
 	GPIOPinTypeQEI(GPIO_PORTF_BASE, GPIO_PIN_4);
-
 	GPIOPinConfigure(GPIO_PD6_PHA0);
 	GPIOPinConfigure(GPIO_PD7_PHB0);
 	GPIOPinConfigure(GPIO_PF4_IDX0);
 
+	/*Encoder interface configuration - counts to 2 000 000*/
 	QEIConfigure(QEI0_BASE, (QEI_CONFIG_CAPTURE_A_B | QEI_CONFIG_NO_RESET |
 			    QEI_CONFIG_QUADRATURE | QEI_CONFIG_NO_SWAP), 2000000);
 
+	/*Encoder velocity interface configure - counts edges in each 1 ms*/
 	QEIVelocityConfigure(QEI0_BASE, QEI_VELDIV_1, 80000-1);
-	QEIVelocityEnable(QEI0_BASE);
 
+	/*Enable interface*/
+	QEIVelocityEnable(QEI0_BASE);
 	QEIEnable(QEI0_BASE);
 }
 
 void initQEI1(void)
 {
+	/*PC5 - phase A, PC6 - phase B, PC4 - index*/
 	GPIOPinTypeQEI(GPIO_PORTC_BASE, GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6);
-
 	GPIOPinConfigure(GPIO_PC4_IDX1);
 	GPIOPinConfigure(GPIO_PC5_PHA1);
 	GPIOPinConfigure(GPIO_PC6_PHB1);
 
+	/*Encoder interface configuration - counts to 2 000 000*/
 	QEIConfigure(QEI1_BASE, (QEI_CONFIG_CAPTURE_A_B | QEI_CONFIG_NO_RESET |
 			    QEI_CONFIG_QUADRATURE | QEI_CONFIG_NO_SWAP), 2000000);
 
+	/*Encoder velocity interface configure - counts edges in each 1 ms*/
 	QEIVelocityConfigure(QEI1_BASE, QEI_VELDIV_1, 80000-1);
-	QEIVelocityEnable(QEI1_BASE);
 
+	/*Enable interface*/
+	QEIVelocityEnable(QEI1_BASE);
 	QEIEnable(QEI1_BASE);
+}
+
+void initAllPeripherals(void)
+{
+	/*clock is 200MHz / 2,5 = 80MHz*/
+	setMainClock();
+
+	/*enables GPIO, PWM and ADC*/
+	enablePeripheralClocks();
+
+	/*before this PD7 and PF0 are locked*/
+	unlockNmiPins();
+
+	/*set pins for motors enable and LEDs*/
+	setGpioOutputs();
+
+	/*ADC measures input voltage and motors currents*/
+	initAdc();
+
+	zeroCurrentAdc = measureMotor1ZeroCurrent();
+
+	/*PWM0 generate signals for MOTOR2*/
+	initPwm0();
+
+	/*PWM1 generate signals for MOTOR1*/
+	initPwm1();
+
+	/*QEI0 measures position and velocity of MOTOR1*/
+	initQEI0();
+
+	/*QEI1 measures position and velocity of MOTOR2*/
+	initQEI1();
+
 }

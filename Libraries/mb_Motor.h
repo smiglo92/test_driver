@@ -20,10 +20,6 @@
 #include "driverlib/pwm.h"
 #include "driverlib/interrupt.h"
 
-volatile uint8_t isMeasureZeroCurrent;
-volatile uint32_t zeroCurrentAdcTab[32];
-volatile uint8_t zeroCurrentAdcIter;
-
 typedef enum {
     MOTOR1 = 0,
     MOTOR2 = 1,
@@ -33,6 +29,9 @@ typedef struct {
 	int32_t kp;
 	int32_t ti;
 	int32_t td;
+	int32_t tp;
+	int32_t a[3];
+	int32_t e[3];
 }MbMotorPid;
 
 typedef struct {
@@ -56,8 +55,10 @@ typedef struct {
 	volatile int32_t velocityError;
 	MbMotorPid velocityPid;
 	volatile int32_t pwmInput;
+	volatile int32_t pwmInputChange;
 	volatile int32_t pwmInputPrevious;
 	volatile int32_t pwmInputUnlimited;
+	volatile int32_t pwmInputUnlimitedPrevious;
 	volatile int32_t direction;
 	MbMotorSynchronization synchronization;
 }MbMotorStruct;

@@ -9,6 +9,8 @@
  * E0 - - - - - - - - - - - LED1
  * F0 - - - - - - - - - - - LED2*/
 
+
+
 #include "mb_LED.h"
 
 static volatile const uint32_t mbLedBase [] = {GPIO_PORTE_BASE,
@@ -36,8 +38,10 @@ void mb_LED_Off(MbDiodaLed LED)
 void mb_LED_Switch(MbDiodaLed LED)
 {
 	/*switch GPIO pin*/
-	if(GPIOPinRead(mbLedBase[LED], mbLedPin[LED]))
+	if(GPIOPinRead(mbLedBase[LED], mbLedPin[LED])) {
 		mb_LED_Off(LED);
-	else
+	}
+	else {
 		mb_LED_On(LED);
+	}
 }

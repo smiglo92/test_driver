@@ -9,29 +9,16 @@
 
 int main(void)
 {
-	setMainClock();
+	/*Global enable all interrupts*/
+	IntMasterEnable();
 
-	enablePeripheralClocks();
+	/*Init peripherals*/
+	initAllPeripherals();
 
-	unlockNmiPins();
+	/*Set PID parameters*/
+	mb_PID_init();
 
-	setGpioOutputs();
-
-	initAdc();
-
-	zeroCurrentAdc = measureMotor1ZeroCurrent();
-
-	initPwm0();
-
-	initPwm1();
-
-	initQEI0();
-
-	initQEI1();
-
-    IntMasterEnable();
-
-	/*Enable motors*/
+    /*Enable motors*/
     mb_Motor_Enable(MOTOR1);
     mb_Motor_Enable(MOTOR2);
 
@@ -39,9 +26,31 @@ int main(void)
     mb_LED_On(LED1);
     mb_LED_On(LED2);
 
-	while(1)
-	{
+    motor1Struct.currentTargetFromCpu = 40;
+    motor2Struct.currentTargetFromCpu = 15;
 
+	/*----------------------------Main while loop----------------------------*/
+	while (1) {
+
+		/*PID regulator for MOTOR1*/
+		if (isPid1Switch) {
+
+			mb_PID_current_compute(MOTOR1);
+
+			mb_Motor_Set_Pulse_Width(MOTOR1, motor1Struct.pwmInput);
+
+			isPid1Switch = 0;
+		}
+
+		/*PID regulator for MOTOR2*/
+		if (isPid2Switch) {
+
+			mb_PID_current_compute(MOTOR2);
+
+			mb_Motor_Set_Pulse_Width(MOTOR2, motor2Struct.pwmInput);
+
+			isPid2Switch = 0;
+		}
 	}
 }
 

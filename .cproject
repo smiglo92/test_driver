@@ -39,6 +39,8 @@
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.GCC.1453436643" name="Enable support for GCC extensions (DEPRECATED) (--gcc)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.GCC" value="true" valueType="boolean"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.DEFINE.1107876584" name="Pre-define NAME (--define, -D)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.DEFINE" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ccs=&quot;ccs&quot;"/>
+									<listOptionValue builtIn="false" value="ARM_MATH_CM4"/>
+									<listOptionValue builtIn="false" value="__FPU_PRESENT=1"/>
 									<listOptionValue builtIn="false" value="PART_TM4C123GH6PM"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.DEBUGGING_MODEL.2086165117" name="Debugging model" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.DEBUGGING_MODEL" value="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.DEBUGGING_MODEL.SYMDEBUG__DWARF" valueType="enumerated"/>
@@ -49,6 +51,9 @@
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.DIAG_WRAP.2018860667" name="Wrap diagnostic messages (--diag_wrap)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.DIAG_WRAP" value="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.DIAG_WRAP.off" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.INCLUDE_PATH.1934959804" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.INCLUDE_PATH" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\Dokumenty\Code Composer Studio\test_driver\UserSource&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\Programy\TivaWare_C_Series\CMSIS\Include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\Programy\TivaWare_C_Series\CMSIS&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;D:\Dokumenty\Code Composer Studio\test_driver\Libraries&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${TIVAWARE_INSTALL}&quot;"/>
 								</option>
@@ -57,6 +62,7 @@
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.OPT_FOR_SPEED.1520625020" name="Speed vs. size trade-offs (--opt_for_speed, -mf)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.OPT_FOR_SPEED" value="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.OPT_FOR_SPEED.0" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.UAL.1193961165" name="Use unified assembly language (--ual)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.UAL" value="true" valueType="boolean"/>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.CHECK_MISRA.792757518" name="Enable checking of MISRA-C:2004 rules (--check_misra)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.CHECK_MISRA" value="" valueType="string"/>
+								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.GEN_FUNC_SUBSECTIONS.1100759132" name="Place each function in a separate subsection (--gen_func_subsections, -ms)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.GEN_FUNC_SUBSECTIONS" value="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compilerID.GEN_FUNC_SUBSECTIONS.on" valueType="enumerated"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compiler.inputType__C_SRCS.568373355" name="C Sources" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compiler.inputType__C_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compiler.inputType__CPP_SRCS.821797346" name="C++ Sources" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compiler.inputType__CPP_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compiler.inputType__ASM_SRCS.1411544065" name="Assembly Sources" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.compiler.inputType__ASM_SRCS"/>
@@ -76,6 +82,7 @@
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.linkerID.LIBRARY.246050168" name="Include library file or command file as input (--library, -l)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.linkerID.LIBRARY" valueType="libs">
 									<listOptionValue builtIn="false" value="&quot;libc.a&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;D:\Dokumenty\DSP_Lib\dsplib-cm4f\Debug\dsplib-cm4f.lib&quot;"/>
 								</option>
 								<inputType id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.exeLinker.inputType__CMD_SRCS.1753095951" name="Linker Command Files" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.exeLinker.inputType__CMD_SRCS"/>
 								<inputType id="com.ti.ccstudio.buildDefinitions.TMS470_16.3.exeLinker.inputType__CMD2_SRCS.2130319050" name="Linker Command Files" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.3.exeLinker.inputType__CMD2_SRCS"/>

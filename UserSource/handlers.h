@@ -20,24 +20,6 @@
 
 #include "mb_Motor.h"
 
-/*variables to compute MOTOR1 zero current*/
-extern volatile uint8_t isMeasureZeroCurrent;
-extern volatile uint32_t zeroCurrentAdcTab[32];
-extern volatile uint32_t zeroCurrentAdc;
-extern volatile uint8_t zeroCurrentAdcIter;
-
-/*variables with ADC measures*/
-uint32_t adc0[1];
-uint32_t adc1[2];
-
-/*structures with motors parameters*/
-extern MbMotorStruct motor1Struct, motor2Struct;
-
-/*Input voltage: inputVoltage1 - before sign, inputVoltage2 - after sign*/
-extern volatile uint32_t inputVoltage1;
-extern volatile uint32_t inputVoltage2;
-
-
 /*ADC0 measures current of MOTOR1 in handler*/
 void ADC0IntHandler(void);
 

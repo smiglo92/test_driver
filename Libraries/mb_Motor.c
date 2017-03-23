@@ -29,6 +29,10 @@
 
 #include "mb_Motor.h"
 
+extern volatile uint8_t isMeasureZeroCurrent;
+extern volatile uint32_t zeroCurrentAdcTab[32];
+extern MbMotorStruct motor1Struct, motor2Struct;
+
 static const uint32_t mbMotorGPIOEnablePort[] = {GPIO_PORTD_BASE,
 		                                         GPIO_PORTB_BASE};
 static const uint32_t mbMotorGPIOEnablePin[] = {GPIO_PIN_2, GPIO_PIN_1};
@@ -37,6 +41,8 @@ static const uint32_t mbMotorPWMOut1[] = {PWM_OUT_0, PWM_OUT_4};
 static const uint32_t mbMotorPWMOut2[] = {PWM_OUT_1, PWM_OUT_5};
 static const uint32_t mbMotorPWMOut[] = {(PWM_OUT_0_BIT | PWM_OUT_1_BIT),
 		                                 (PWM_OUT_4_BIT | PWM_OUT_5_BIT)};
+static MbMotorStruct* const mbMotorMotorStruct [] = {&motor1Struct,
+		                                           &motor2Struct};
 
 ///////////////////////////////////////////////////////////////////////////////
 void mb_Motor_Enable(MbMotor motor)
@@ -65,37 +71,40 @@ void mb_Motor_Disable(MbMotor motor)
 void mb_Motor_Set_Pulse_Width(MbMotor motor, int16_t width)
 {
 	//if width is negative, set PWM signal at first output
-	if(width < 0)
-	{
+	if(width < 0) {
 		PWMPulseWidthSet(mbMotorPWMBase[motor], mbMotorPWMOut1[motor], -width);
 		PWMPulseWidthSet(mbMotorPWMBase[motor], mbMotorPWMOut2[motor], 1);
 	}
 
 	//if width is positive, set PWM signal at second output
-	else if(width > 0)
-	{
+	else if(width > 0) {
 		PWMPulseWidthSet(mbMotorPWMBase[motor], mbMotorPWMOut1[motor], 1);
 		PWMPulseWidthSet(mbMotorPWMBase[motor], mbMotorPWMOut2[motor], width);
 	}
 
 	//if width is equal zero, set low state signal at both outputs
-	else
-	{
+	else {
 		PWMPulseWidthSet(mbMotorPWMBase[motor], mbMotorPWMOut1[motor], 1);
 		PWMPulseWidthSet(mbMotorPWMBase[motor], mbMotorPWMOut2[motor], 1);
 	}
+
+	mbMotorMotorStruct[motor]->pwmInput = width;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 uint8_t mb_Motor_Synchro_HomeSwitch(MbMotor motor)
 {
 	uint8_t state;
-	if(motor == MOTOR1)
+	if(motor == MOTOR1) {
 		state = (uint8_t)GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_3);
-	else
+	}
+	else {
 		state = (uint8_t)GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_3);
-	if(state)
+	}
+
+	if(state) {
 		state = 1;
+	}
 	return state;
 }
 
@@ -107,12 +116,11 @@ uint32_t measureMotor1ZeroCurrent(void)
 
 	isMeasureZeroCurrent = 1;
 
-	while (zeroCurrentAdcIter < 32);
+	while (isMeasureZeroCurrent == 1) {
+		;
+	}
 
-	isMeasureZeroCurrent = 0;
-
-	for (i = 0; i < 32; i++)
-	{
+	for (i = 0; i < 32; i++) {
 		result += zeroCurrentAdcTab[i];
 	}
 
